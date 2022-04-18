@@ -2,7 +2,6 @@ class NotesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_note, only: %i[ show edit update destroy ]
 
-  # GET /notes or /notes.json
   def index
     share_notes = ShareNote.where(user_id: current_user).pluck(:note_id)
     @notes = (Note.where(user_id: current_user) + Note.where(id: share_notes)).uniq
@@ -34,7 +33,6 @@ class NotesController < ApplicationController
     end
   end
 
-  # GET /notes/1 or /notes/1.json
   def show
   end
 
