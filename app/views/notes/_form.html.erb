@@ -12,6 +12,11 @@
   <% end %>
 
   <div class="field">
+    <%= form.label :tag %>
+    <%= form.select :tag , ["entertainment","playing","people"], prompt: "select tag" %>
+  </div>
+
+  <div class="field">
     <%= form.label :note %>
     <%= form.text_area :note %>
   </div>
