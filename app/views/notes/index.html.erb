@@ -12,7 +12,7 @@
   <tbody>
     <% @notes.each do |note| %>
       <tr>
-        <td><%= note.tag %></td>
+        <td><%= note.tag %> (<%=Note.count {|tag_c| tag_c.tag == note.tag } %>)</td>
         <td><%= note.note %></td>
         <td><%= link_to 'Show', note %></td>
         <td><%= link_to 'Edit', edit_note_path(note) %></td>
