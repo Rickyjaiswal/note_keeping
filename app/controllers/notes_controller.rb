@@ -9,11 +9,15 @@ class NotesController < ApplicationController
   end
 
   def share
+    parent_id = ShareNote.find_by(note_id: params[:note_id])
     shared = ShareNote.where(user_id: params[:share][:user_id],note_id: params[:note_id])
     if shared.present?
       redirect_to notes_url, notice: "Note was already shared."
     elsif (Note.find_by(user_id: params[:share][:user_id] ,id: params[:note_id])).present?
       redirect_to notes_url, notice: "Note was creted by me."
+    elsif parent_id.present?
+      ShareNote.create(user_id: params[:share][:user_id],note_id: params[:note_id], parent_id: parent_id.user_id)
+      redirect_to notes_url, notice: "Note was successfully shared with parent."
     else
       ShareNote.create(user_id: params[:share][:user_id],note_id: params[:note_id])
       redirect_to notes_url, notice: "Note was successfully shared."
@@ -21,11 +25,11 @@ class NotesController < ApplicationController
   end
 
   def unshare
-    p 222222222222222222222222222222222222222222
-    p params
-    shared = ShareNote.find_by(user_id: params[:share][:user_id],note_id: params[:note_id])
+    shared = ShareNote.find_by(user_id: params[:share][:user_id],note_id: params[:note_id],parent_id: nil)
+    parent_share = ShareNote.where(parent_id: shared.user_id)
     if shared.present?
       shared.destroy
+      parent_share.delete_all
       redirect_to notes_url, notice: "Note was successfully removed from shared."
     end
   end
